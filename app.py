@@ -7,8 +7,8 @@ from utils import load_model, infer_uploaded_video, infer_uploaded_image, infer_
 st.markdown("<h1 style='text-align: center;'>VAMS - MobiNext</h1>", unsafe_allow_html=True)
 
 # Author details
-st.sidebar.markdown("Author: MobiNext Technologies")
-st.sidebar.markdown("Task: Real-time object detection")
+st.sidebar.markdown("<p style='text-align: center;'><strong>**MobiNext Technologies**</strong></p>", unsafe_allow_html=True)
+st.sidebar.markdown("<div style='text-align: center;'>Task: Real-time object detection</div>", unsafe_allow_html=True)
 
 # sidebar
 st.sidebar.title("Model configuration")
@@ -17,7 +17,7 @@ st.sidebar.title("Model configuration")
 task_type = st.sidebar.selectbox(
     "Select Task",
     ["Detection"]
-)
+    )
 
 model_type = None
 if task_type == "Detection":
@@ -28,8 +28,8 @@ if task_type == "Detection":
 else:
     st.error("Currently only 'Detection' function is implemented")
 
-confidence = float(st.sidebar.slider(
-    "Select Model Confidence", 30, 100, 50)) / 100
+confidence = float(st.sidebar.slider("Select Model Confidence", 30, 100, 50)) / 100
+
 
 model_path = ""
 if model_type:
@@ -65,9 +65,14 @@ except Exception as e:
     st.error(f"Unable to perform inference: {e}")
 
 # display copyright information and other relevant details
+import streamlit as st
+
 st.sidebar.markdown("""
-Copyright &copy; 2023 Mobinext. All rights reserved.
-""")
+<div style="text-align: center;">
+    <div>Copyright &copy; 2023 Mobinext Technologies.</div>
+    <div>All rights reserved.</div>
+</div>
+""", unsafe_allow_html=True)
 
 # Add author details at the bottom
 st.markdown("<br><br>", unsafe_allow_html=True)  # Create some space
