@@ -25,14 +25,14 @@ DETECTION_MODEL_DIR = ROOT / 'weights' / 'detection'
 YOLOv8n = DETECTION_MODEL_DIR / "Object_detection.pt"
 YOLOv8s = DETECTION_MODEL_DIR / "Activity_detector.pt"
 YOLOv8m = DETECTION_MODEL_DIR / "Segmentation.pt"
-YOLOv8l = DETECTION_MODEL_DIR / "Numplate1.pt"
+YOLOv8l = DETECTION_MODEL_DIR / "Number_plate.pt"
 YOLOv8x = DETECTION_MODEL_DIR / "Gun_detector.pt"
 
 DETECTION_MODEL_LIST = [
     "Object_detection.pt",
     "Activity_detector.pt",
     "Segmentation.pt",
-    "Numplate1.pt",
+    "Number_plate.pt",
     "Gun_detector.pt"]
 
 
