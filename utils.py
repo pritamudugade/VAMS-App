@@ -108,15 +108,31 @@ def infer_uploaded_video(confidence, model):
         # Open the uploaded video file
         vid_cap = cv2.VideoCapture(uploaded_video_path)
 
-        st_frame = st.empty()  # Create a Streamlit element for displaying the video
+        # Get the frame rate of the input video
+        frame_rate = int(vid_cap.get(cv2.CAP_PROP_FPS))
+
+        # Create an output video writer with the same frame rate
+        output_video_path = tempfile.NamedTemporaryFile(delete=False, suffix='.avi').name
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        out = cv2.VideoWriter(output_video_path, fourcc, frame_rate, (720, int(720 * (9 / 16))))
 
         while vid_cap.isOpened():
             success, image = vid_cap.read()
             if success:
-                _display_detected_frames(confidence, model, st_frame, image)
+                _display_detected_frames(confidence, model, st.empty(), image)
+
+                # Write the processed frame to the output video
+                out.write(image)
+                
+                # Add a delay to match the frame rate of the input video
+                cv2.waitKey(int(1000 / frame_rate))
             else:
                 vid_cap.release()
                 break
+
+        # Release video objects
+        out.release()
+        cv2.destroyAllWindows()
 
 
 def infer_uploaded_webcam(conf, model):
