@@ -111,18 +111,16 @@ def infer_uploaded_video(confidence, model):
         # Get the frame rate of the input video
         frame_rate = int(vid_cap.get(cv2.CAP_PROP_FPS))
 
-        # Create an output video writer with the same frame rate
-        output_video_path = tempfile.NamedTemporaryFile(delete=False, suffix='.avi').name
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter(output_video_path, fourcc, frame_rate, (720, int(720 * (9 / 16))))
+        # Create a list to store frames with detected objects
+        frames_with_objects = []
 
         while vid_cap.isOpened():
             success, image = vid_cap.read()
             if success:
                 _display_detected_frames(confidence, model, st.empty(), image)
 
-                # Write the processed frame to the output video
-                out.write(image)
+                # Store the frame with detected objects in the list
+                frames_with_objects.append(image)
                 
                 # Add a delay to match the frame rate of the input video
                 cv2.waitKey(int(1000 / frame_rate))
@@ -131,8 +129,33 @@ def infer_uploaded_video(confidence, model):
                 break
 
         # Release video objects
-        out.release()
         cv2.destroyAllWindows()
+
+        # Create an output video writer with the same frame rate
+        output_video_path = tempfile.NamedTemporaryFile(delete=False, suffix='.avi').name
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        out = cv2.VideoWriter(output_video_path, fourcc, frame_rate, (720, int(720 * (9 / 16))))
+
+        # Write frames with detected objects to the output video
+        for frame in frames_with_objects:
+            out.write(frame)
+
+        # Release the output video writer
+        out.release()
+
+        # Display a link to download the processed video
+        st.markdown(f"Download the processed video [here]({output_video_path})")
+
+        # Add a button to save the processed video
+        if st.button("Save Processed Video"):
+            with open(output_video_path, "rb") as f:
+                st.download_button(
+                    label="Click here to download the processed video",
+                    data=f,
+                    key="processed_video",
+                    file_name="processed_video.avi",
+                )
+
 
 
 def infer_uploaded_webcam(conf, model):
